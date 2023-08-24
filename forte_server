@@ -1,0 +1,13 @@
+#!/usr/bin/env python3
+
+from forte.server import ForteServer
+import asyncio
+
+async def main():
+    forte = ForteServer()
+
+    await forte.connect('127.0.0.1')
+    await forte.run()
+
+if __name__ == '__main__':
+    asyncio.run(main())
