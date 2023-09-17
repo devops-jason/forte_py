@@ -66,4 +66,21 @@ class ForteClient():
 
             print(reply_msg.dump_yaml())
 
+        forte_msg.set_forte_command('ps')
+        await self._nc.publish('forte.command',forte_msg.dump_yaml().encode(), reply=forte_inbox)
+        await self._nc.flush()
+
+        print('Published message to subject forte.ping reply inbox is' + forte_inbox + '.')
+
+        self.set_msg_timeout(2.5)
+        while forte_reply_msg := await self.get_msg(forte_inbox):
+            reply_msg = ForteMessage()
+            try:
+                reply_msg.load_yaml(forte_reply_msg.data.decode())
+            except:
+                print("Unable to read data from message in yaml.")
+                next
+
+            print(reply_msg.dump_yaml())
+
         await self._nc.close()

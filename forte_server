@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 
+# Written By: Jason Miller
+# Date: 9-16-2023
+# Description: A forte_server which takes messages from the client and executes
+#              them as a type of command and returns the results to the client.
+
+# Using pipreqs module to generate requirements.txt file automatically
+
 from forte.server import ForteServer
 import asyncio
 

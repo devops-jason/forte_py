@@ -3,6 +3,8 @@ import socket
 import time
 import asyncio
 from forte.message import ForteMessage
+import subprocess
+import os
 
 class ForteServer():
     def __init__(self):
@@ -30,7 +32,7 @@ class ForteServer():
             msg = None
 
         return msg
-    
+        
     async def run(self):
         if self._nc.is_closed:
             print('Must connect to nats-server first.')
@@ -64,6 +66,15 @@ class ForteServer():
                         forte_reply.set_reply_data(socket.gethostname() + ': pong')
                         await self._nc.publish(msg.reply, forte_reply.dump_yaml().encode())
                         print('published pong response')
+
+                if msg.subject == 'forte.command':
+                    if forte_msg.get_forte_command() == 'ps':
+                        print('responding to ps command.')
+                        ps = subprocess.check_output('ps -ef', shell=True)
+                        forte_reply.set_reply_uuid(forte_msg.get_forte_uuid())
+                        forte_reply.set_reply_data(ps.decode('utf-8'))
+                        await self._nc.publish(msg.reply, forte_reply.dump_yaml().encode())
+                        print('published ps response')
 
 
         await self._nc.close()

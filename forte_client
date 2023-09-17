@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# Using pipreqs module to generate requirements.txt file automatically
+
 import asyncio
 from forte.client import ForteClient
 
